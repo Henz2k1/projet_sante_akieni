@@ -3,7 +3,11 @@
 # Challenge : Rapport urgent pour le Ministère — Département du Pool
 # ============================================================
 
-# --- ENREGISTREMENT DES DONNÉES BRUTES ---
+
+# ============================================================ 
+# ENREGISTREMENT DES DONNÉES BRUTES POUR LES 5 HOPITAUX 
+# ============================================================ 
+
 # Hôpital de District de Kinkala
 kinkala_budget = 12_500_000
 kinkala_consultations = 1847
@@ -34,7 +38,11 @@ kindamba_lits_occupes = 33
 kindamba_medecins = 2
 kindamba_population = 67_000
 
-# --- CALCULS DES KPIS POUR CHAQUE ETABLISSEMENT ---
+
+# ============================================================ 
+# CALCULS DES KPIS POUR CHAQUE ETABLISSEMENT
+# ============================================================ 
+
 # 1. Kinkala
 kinkala_cout_moyen = round(kinkala_budget / (kinkala_consultations + kinkala_hospitalisations), 2)
 kinkala_taux_occ = round((kinkala_lits_occupes / kinkala_lits_totaux) * 100, 2)
@@ -53,26 +61,41 @@ kindamba_taux_occ = round((kindamba_lits_occupes / kindamba_lits_totaux) * 100, 
 kindamba_densite = round((kindamba_medecins / kindamba_population) * 1000, 3)
 kindamba_mortalite = round((kindamba_deces / kindamba_hospitalisations) * 100, 2)
 
-# --- GÉNÉRATION DU RAPPORT CONSOLIDÉ POUR LE MINISTRE ---
-print("=" * 100)
-print("          RAPPORT SANITAIRE ET FINANCIER CONSOLIDÉ — DÉPARTEMENT DU POOL")
-print("=" * 100)
-print(f"{'Indicateur / KPI':<25}\t| {'HD Kinkala':<15}\t| {'CMS Vindza':<15}\t| {'H Kindamba':<15}")
-print("-" * 100)
-print(f"{'Coût moyen par patient':<25}\t| {kinkala_cout_moyen:<11} FCFA\t| {vindza_cout_moyen:<11} FCFA\t| {kindamba_cout_moyen:<11} FCFA")
-print(f"{'Taux occupation lits':<25}\t| {kinkala_taux_occ:<14}%\t| {vindza_taux_occ:<14}%\t| {kindamba_taux_occ:<14}%")
-print(f"{'Densité médicale (/1000)':<25}\t| {kinkala_densite:<14}\t| {vindza_densite:<14}\t| {kindamba_densite:<14}")
-print(f"{'Taux mortalité hosp.':<25}\t| {kinkala_mortalite:<14}%\t| {vindza_mortalite:<14}%\t| {kindamba_mortalite:<14}%")
-print("=" * 100)
+
+# ============================================================ 
+# GÉNÉRATION DU RAPPORT CONSOLIDÉ POUR LE MINISTRE
+# ============================================================ 
+
+#Avec cette variable, on evitera de chaque fois repeter les separateurs manuellement lors de nos affichages 
+separateurs = "=" * 80
+
+print(f'''{separateurs}
+RAPPORT SANITAIRE ET FINANCIER CONSOLIDÉ — DÉPARTEMENT DU POOL
+{separateurs}
+{'Indicateur / KPI'}\t| {'HD Kinkala'}\t| {'CMS Vindza'}\t| {'H Kindamba'}
+{separateurs}
+{'Coût moyen par patient'}\t| {kinkala_cout_moyen} FCFA\t| {vindza_cout_moyen} FCFA\t| {kindamba_cout_moyen} FCFA
+{'Taux occupation lits'}\t| {kinkala_taux_occ}%\t| {vindza_taux_occ}%\t\t| {kindamba_taux_occ}%
+{'Densité médicale (/1000)'}| {kinkala_densite}\t\t| {vindza_densite}\t\t| {kindamba_densite}
+{'Taux mortalité hosp.'}\t| {kinkala_mortalite}%\t\t| {vindza_mortalite}%\t\t| {kindamba_mortalite}%
+{separateurs}
+\n''')
 
 # Identification de l'établissement en situation critique (Mortalité > 2% OU Densité < 0.05)
-print("\nDIAGNOSTIC ET ALERTES CRITIQUES :")
-print(f" - HD Kinkala : Mortalité ({kinkala_mortalite}%) - Alerte : Suivi requis.")
-print(f" - CMS Vindza : Densité médicale ({vindza_densite}) extrêmement basse.")
-print(f" - [CRITIQUE] Hôpital de Kindamba : Taux de mortalité de {kindamba_mortalite}% (Seuil OMS dépassé > 2%).")
-print("-" * 100)
+print(f'''{separateurs}
+DIAGNOSTIC ET ALERTES CRITIQUES
+{separateurs}
+- HD Kinkala\t\t\t: Mortalité ({kinkala_mortalite}%) - Alerte : Suivi requis
+- CMS Vindza\t\t\t: Densité médicale ({vindza_densite}) extrêmement basse
+- [CRITIQUE] Hôpital de Kindamba: Taux de mortalité de {kindamba_mortalite}% (Seuil OMS dépassé > 2%)
+{separateurs}
+''')
 
-# --- BONUS : SIMULATION RECRUTEMENT ---
+
+# ============================================================ 
+# BONUS : SIMULATION RECRUTEMENT
+# ============================================================ 
+
 cout_trim_un_medecin = 1_200_000
 objectif_medecins = 5
 
@@ -83,8 +106,11 @@ cout_kindamba_recrutement = (objectif_medecins - kindamba_medecins) * cout_trim_
 cout_total_recrutement = cout_kinkala_recrutement + cout_vindza_recrutement + cout_kindamba_recrutement
 budget_global_actuel = kinkala_budget + vindza_budget + kindamba_budget
 
-print("ESTIMATION BUDGÉTAIRE — PASSAGE À 5 MÉDECINS PAR ÉTABLISSEMENT :")
-print(f" - Coût supplémentaire total requis : {cout_total_recrutement} FCFA")
-print(f" - Budget trimestriel actuel combiné : {budget_global_actuel} FCFA")
-print(f" - Pourcentage d'augmentation du budget requis : {round((cout_total_recrutement / budget_global_actuel) * 100, 2)}%")
-print("=" * 100)
+print(f'''{separateurs}
+ESTIMATION BUDGÉTAIRE : PASSAGE À 5 MÉDECINS PAR ÉTABLISSEMENT
+{separateurs}
+- Coût supplémentaire total requis \t\t : {cout_total_recrutement} FCFA")
+- Budget trimestriel actuel combiné \t\t : {budget_global_actuel} FCFA")
+- Pourcentage d'augmentation du budget requis \t : {round((cout_total_recrutement / budget_global_actuel) * 100, 2)}%
+{separateurs}
+''')

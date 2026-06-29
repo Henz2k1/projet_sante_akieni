@@ -5,12 +5,16 @@
 # + S3 (if/elif/else, conditions composees)
 # ============================================================
 
-# --- DONNEES S2 : Variables medicaments --
-# (Reimporter depuis sante_variables.py ou redeclarer ici)
+
+# ==============================================================================
+# VARIABLES MEDICAMENTS
+# ==============================================================================
+
+# Donnés réimportées depuis le fichier sante_variables.py
 m1_nom            = 'Artemether-Lumefantrine'
 m1_stock          = 3200
 m1_seuil_rupture  = 2000
-m1_cout_unitaire  = 3500.0   # FCFA
+m1_cout_unitaire  = 3500.0   
 
 m2_nom            = 'Amoxicilline 500mg'
 m2_stock          = 950
@@ -33,9 +37,11 @@ m5_seuil_rupture  = 1000
 m5_cout_unitaire  = 8500.0
 
 
-# --- CLASSIFICATION MEDICAMENT 1 : Artemether-Lumefantrine --
-# S3 (nouveau) : if / elif / else
-# S2 (reutilise) : operateurs arithmetiques pour calcul des seuils
+# ==============================================================================
+# CLASSIFICATION DES MEDICAMENTS 
+# ==============================================================================
+
+# classification médicament 1 : Artemether-Lumefantrine 
 if m1_stock <= m1_seuil_rupture:
     m1_statut  = 'RUPTURE CRITIQUE'
     m1_couleur = '[ROUGE]'
@@ -53,8 +59,7 @@ else:
     m1_couleur = '[VERT]'
     m1_action  = 'Situation normale — suivi standard'
 
-
-# --- CLASSIFICATION MEDICAMENT 2 : Amoxicilline 500mg --
+# classification médicament2 : Amoxicilline 500mg 
 if m2_stock <= m2_seuil_rupture:
     m2_statut  = 'RUPTURE CRITIQUE'
     m2_couleur = '[ROUGE]'
@@ -72,8 +77,7 @@ else:
     m2_couleur = '[VERT]'
     m2_action  = 'Situation normale — suivi standard'
 
-
-# --- CLASSIFICATION MEDICAMENT 3 : Paracetamol 500mg --
+# classification médicament 3 : Paracetamol 500mg 
 if m3_stock <= m3_seuil_rupture:
     m3_statut  = 'RUPTURE CRITIQUE'
     m3_couleur = '[ROUGE]'
@@ -91,8 +95,7 @@ else:
     m3_couleur = '[VERT]'
     m3_action  = 'Situation normale — suivi standard'
 
-
-# --- CLASSIFICATION MEDICAMENT 4 : SRO (sachets) --
+# classification médicament 4 : SRO (sachets) 
 if m4_stock <= m4_seuil_rupture:
     m4_statut  = 'RUPTURE CRITIQUE'
     m4_couleur = '[ROUGE]'
@@ -110,8 +113,7 @@ else:
     m4_couleur = '[VERT]'
     m4_action  = 'Situation normale — suivi standard'
 
-
-# --- CLASSIFICATION MEDICAMENT 5 : Vaccin DTP-HepB-Hib --
+# classification médicament 5 : Vaccin DTP-HepB-Hib 
 if m5_stock <= m5_seuil_rupture:
     m5_statut  = 'RUPTURE CRITIQUE'
     m5_couleur = '[ROUGE]'
@@ -130,12 +132,15 @@ else:
     m5_action  = 'Situation normale — suivi standard'
 
 
-# --- COMPTAGE DES ALERTES --
-# S2 (reutilise) : variables numeriques
-# S3 (nouveau) : conditions pour compter
+# ==============================================================================
+# COMPTAGE DES ALERTES 
+# ==============================================================================
+
+#initialisation des variables de comptage
 nb_ruptures_critiques = 0
 nb_alertes_stock      = 0
 nb_stock_normaux = 0
+
 # TODO : Utiliser des if pour incrementer les compteurs
 # Exemple : 
 # if m1_statut == 'RUPTURE CRITIQUE': nb_ruptures_critiques = nb_ruptures_critiques + 1
@@ -144,7 +149,8 @@ nb_stock_normaux = 0
 name_med_critique = ""
 name_med_alerte_stock = ""
 name_med_stock_normaux = ""
-# Comptage Medicament 1
+
+# Comptage medicament 1
 if m1_statut == 'RUPTURE CRITIQUE': 
     nb_ruptures_critiques += 1
     name_med_critique += m1_nom
@@ -154,11 +160,12 @@ if m1_statut == 'ALERTE STOCK':
 if m1_statut == 'STOCK NORMAL':
     nb_stock_normaux = nb_stock_normaux + 1
     name_med_stock_normaux += m1_nom
-# Comptage Medicament 2
+
+# Comptage medicament 2
 if m2_statut == 'RUPTURE CRITIQUE': 
     nb_ruptures_critiques += 1
     name_med_critique += m2_nom
-print("s2 critique",nb_ruptures_critiques)
+# print("s2 critique",nb_ruptures_critiques)
 if m2_statut == 'ALERTE STOCK': 
     nb_alertes_stock += 1
     name_med_alerte_stock += m2_nom
@@ -166,29 +173,31 @@ if m2_statut == 'STOCK NORMAL':
     nb_stock_normaux = nb_stock_normaux + 1
     name_med_stock_normaux += m2_nom
 
-# Comptage Medicament 3
+# Comptage medicament 3
 if m3_statut == 'RUPTURE CRITIQUE':
     nb_ruptures_critiques += 1
     name_med_critique += m3_nom
-print("s3 critique",nb_ruptures_critiques)
+# print("s3 critique",nb_ruptures_critiques)
 if m3_statut == 'ALERTE STOCK': 
     nb_alertes_stock += 1
     name_med_alerte_stock = m3_nom
 if m3_statut == 'STOCK NORMAL':
     nb_stock_normaux = nb_stock_normaux + 1
     name_med_stock_normaux += m3_nom
-# Comptage Medicament 4
+
+# Comptage medicament 4
 if m4_statut == 'RUPTURE CRITIQUE': 
     nb_ruptures_critiques += 1
     name_med_critique += m4_nom
-print("s4 critique",nb_ruptures_critiques)
+# print("s4 critique",nb_ruptures_critiques)
 if m4_statut == 'ALERTE STOCK': 
     nb_alertes_stock += 1
     name_med_alerte_stock = m4_nom
 if m4_statut == 'STOCK NORMAL':
     nb_stock_normaux = nb_stock_normaux + 1
     name_med_stock_normaux += m4_nom
-# Comptage Medicament 5
+
+# Comptage medicament 5
 if m5_statut == 'RUPTURE CRITIQUE': 
     nb_ruptures_critiques += 1
     name_med_critique += m5_nom
@@ -198,59 +207,66 @@ if m5_statut == 'ALERTE STOCK':
 if m5_statut == 'STOCK NORMAL':
     nb_stock_normaux = nb_stock_normaux + 1
     name_med_stock_normaux += m5_nom
-# --- AFFICHAGE RAPPORT --
+
+# ==============================================================================
+# AFFICHAGE DU RAPPORT 
+# ==============================================================================
+
 # S2 (reutilise) : f-strings structurees
 # S3 (nouveau) : statuts et couleurs determines par les conditions
-print('=' * 65)
-print('  RAPPORT DE STOCK — PHARMACIE NATIONALE D APPROVISIONNEMENT')
-print('  Date : 15 janvier 2026')
-print('=' * 65)
+
+separateurs = "=" * 80
+
+print(f'''{separateurs}
+RAPPORT DE STOCK — PHARMACIE NATIONALE APPROVISIONNEMENT
+Date : 15 janvier 2026')
+{separateurs}''')
 
 # Medicament 1
-print(f'  {m1_couleur} {m1_nom}')
-print(f'      Stock : {m1_stock} unites | Seuil rupture : {m1_seuil_rupture}')
-print(f'      Statut : {m1_statut}')
-print(f'      Action : {m1_action}')
-print('-' * 65)
+print(f'''{m1_couleur} {m1_nom}
+Stock \t : {m1_stock} unites \t | Seuil rupture : {m1_seuil_rupture}
+Statut \t : {m1_statut}
+Action \t : {m1_action}
+{separateurs}''')
 
 # Medicament 2
-print(f'  {m2_couleur} {m2_nom}')
-print(f'      Stock : {m2_stock} unites | Seuil rupture : {m2_seuil_rupture}')
-print(f'      Statut : {m2_statut}')
-print(f'      Action : {m2_action}')
-print('-' * 65)
+print(f'''{m2_couleur} {m2_nom}
+Stock \t : {m2_stock} unites \t | Seuil rupture : {m2_seuil_rupture}
+Statut \t : {m2_statut}
+Action \t : {m2_action}
+{separateurs}''')
 
 # Medicament 3
-print(f'  {m3_couleur} {m3_nom}')
-print(f'      Stock : {m3_stock} unites | Seuil rupture : {m3_seuil_rupture}')
-print(f'      Statut : {m3_statut}')
-print(f'      Action : {m3_action}')
-print('-' * 65)
+print(f'''{m3_couleur} {m3_nom}
+Stock \t : {m3_stock} unites  | Seuil rupture : {m3_seuil_rupture}
+Statut \t : {m3_statut}
+Action \t : {m3_action}
+{separateurs}''')
 
 # Medicament 4
-print(f'  {m4_couleur} {m4_nom}')
-print(f'      Stock : {m4_stock} unites | Seuil rupture : {m4_seuil_rupture}')
-print(f'      Statut : {m4_statut}')
-print(f'      Action : {m4_action}')
-print('-' * 65)
+print(f'''{m4_couleur} {m4_nom}
+Stock \t : {m4_stock} unites \t | Seuil rupture : {m4_seuil_rupture}
+Statut \t : {m4_statut}
+Action \t : {m4_action}
+{separateurs}''')
 
 # Medicament 5
-print(f'  {m5_couleur} {m5_nom}')
-print(f'      Stock : {m5_stock} unites | Seuil rupture : {m5_seuil_rupture}')
-print(f'      Statut : {m5_statut}')
-print(f'      Action : {m5_action}')
+print(f''''{m5_couleur} {m5_nom}
+Stock \t : {m5_stock} unites \t | Seuil rupture : {m5_seuil_rupture}
+Statut \t : {m5_statut}
+Action \t : {m5_action}''')
 
 # --- BILAN FINAL ---
-print('=' * 65)
-print('  BILAN STOCK — PNA CONGO')
-print(f'  Ruptures critiques : {nb_ruptures_critiques} ({name_med_critique})')
-print(f'  Alertes stock : {nb_alertes_stock} ({name_med_alerte_stock})')
-print(f'  Stocks Normaux : {nb_stock_normaux} ({name_med_stock_normaux})')
+print(f'''{separateurs})
+BILAN STOCK — PNA CONGO
+Ruptures critiques : {nb_ruptures_critiques} ({name_med_critique})
+Alertes stock : {nb_alertes_stock} ({name_med_alerte_stock})
+Stocks Normaux : {nb_stock_normaux} ({name_med_stock_normaux})''')
 
-print('=' * 65)
+print(separateurs)
 
 # Alerte prioritaire conditionnelle (uniquement s'il y a des ruptures critiques)
 if nb_ruptures_critiques > 0:
-    print(f'  !! ALERTE PRIORITAIRE : {nb_ruptures_critiques} medicaments en RUPTURE CRITIQUE !!')
-    print('  Transmettre immediatement au Dr. MOUKALA (PNA)')
-    print('=' * 65)
+    print(f'''ALERTE PRIORITAIRE : {nb_ruptures_critiques} medicaments en RUPTURE CRITIQUE
+Transmettre immediatement au Dr. MOUKALA (PNA)
+{separateurs}''')
