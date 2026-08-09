@@ -1,29 +1,12 @@
--- ============================================================
--- 1. Réinitialisation complète de la base de données
--- ============================================================
-USE master;
-GO
 
-IF EXISTS (SELECT name FROM sys.databases WHERE name = 'OlistCommerce')
-BEGIN
-    ALTER DATABASE OlistCommerce SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
-    DROP DATABASE OlistCommerce;
-END
-GO
-
--- ============================================================
--- Exercice 1 : Création et sélection de la base
--- ============================================================
+-- Exercice 1
 CREATE DATABASE OlistCommerce;
 GO
 
 USE OlistCommerce;
 GO
 
-
--- ============================================================
--- Exercice 2 : Création des tables de référence
--- ============================================================
+-- Exercice 2
 CREATE TABLE customers (
     customer_id VARCHAR(50) PRIMARY KEY,
     customer_unique_id VARCHAR(50) NOT NULL,
@@ -60,10 +43,7 @@ CREATE TABLE product_category_name_translation (
 );
 GO
 
-
--- ============================================================
--- Exercice 3 : Tables transactionnelles et clés étrangères
--- ============================================================
+-- Exercice 3
 CREATE TABLE orders (
     order_id VARCHAR(50) PRIMARY KEY,
     customer_id VARCHAR(50) NOT NULL,
@@ -73,9 +53,7 @@ CREATE TABLE orders (
     order_delivered_carrier_date DATETIME,
     order_delivered_customer_date DATETIME,
     order_estimated_delivery_date DATETIME NOT NULL,
-
-    CONSTRAINT FK_orders_customers 
-        FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
+    CONSTRAINT FK_orders_customers FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
 );
 GO
 
@@ -87,15 +65,10 @@ CREATE TABLE order_items (
     shipping_limit_date DATETIME,
     price DECIMAL(10,2) NOT NULL,
     freight_value DECIMAL(10,2) NOT NULL,
-
-    CONSTRAINT PK_order_items 
-        PRIMARY KEY (order_id, order_item_id),
-    CONSTRAINT FK_order_items_orders 
-        FOREIGN KEY (order_id) REFERENCES orders(order_id),
-    CONSTRAINT FK_order_items_products 
-        FOREIGN KEY (product_id) REFERENCES products(product_id),
-    CONSTRAINT FK_order_items_sellers 
-        FOREIGN KEY (seller_id) REFERENCES sellers(seller_id)
+    CONSTRAINT PK_order_items PRIMARY KEY (order_id, order_item_id),
+    CONSTRAINT FK_order_items_orders FOREIGN KEY (order_id) REFERENCES orders(order_id),
+    CONSTRAINT FK_order_items_products FOREIGN KEY (product_id) REFERENCES products(product_id),
+    CONSTRAINT FK_order_items_sellers FOREIGN KEY (seller_id) REFERENCES sellers(seller_id)
 );
 GO
 
@@ -105,11 +78,8 @@ CREATE TABLE order_payments (
     payment_type VARCHAR(30) NOT NULL,
     payment_installments INT,
     payment_value DECIMAL(10,2) NOT NULL,
-
-    CONSTRAINT PK_order_payments 
-        PRIMARY KEY (order_id, payment_sequential),
-    CONSTRAINT FK_order_payments_orders 
-        FOREIGN KEY (order_id) REFERENCES orders(order_id)
+    CONSTRAINT PK_order_payments PRIMARY KEY (order_id, payment_sequential),
+    CONSTRAINT FK_order_payments_orders FOREIGN KEY (order_id) REFERENCES orders(order_id)
 );
 GO
 
@@ -121,42 +91,27 @@ CREATE TABLE order_reviews (
     review_comment_message NVARCHAR(MAX),
     review_creation_date DATETIME,
     review_answer_timestamp DATETIME,
-
-    CONSTRAINT FK_order_reviews_orders 
-        FOREIGN KEY (order_id) REFERENCES orders(order_id)
+    CONSTRAINT FK_order_reviews_orders FOREIGN KEY (order_id) REFERENCES orders(order_id)
 );
 GO
 
-
--- ============================================================
--- Exercice 4 : Ajout de contrainte CHECK
--- ============================================================
+-- Exercice 4
 ALTER TABLE order_reviews
-ADD CONSTRAINT CHK_review_score 
-    CHECK (review_score BETWEEN 1 AND 5);
+ADD CONSTRAINT CHK_review_score CHECK (review_score BETWEEN 1 AND 5);
 GO
 
-
--- ============================================================
--- Exercice 5 : Colonne calculée
--- ============================================================
+-- Exercice 5
 ALTER TABLE order_items
 ADD total_value AS (price + freight_value);
 GO
 
-
--- ============================================================
--- Exercice 6 : Modifications de la table products
--- ============================================================
+-- Exercice 6
 ALTER TABLE products
 ADD product_brand VARCHAR(100),
     is_active BIT NOT NULL DEFAULT 1;
 GO
 
-
--- ============================================================
--- Exercice 7 : Manipulation temporaire de table
--- ============================================================
+-- Exercice 7
 CREATE TABLE test_import (
     id INT,
     nom VARCHAR(50),
@@ -174,10 +129,7 @@ GO
 DROP TABLE test_import_v2;
 GO
 
-
--- ============================================================
--- Exercice 8 : Table d'audit
--- ============================================================
+-- Exercice 8
 CREATE TABLE order_audit (
     audit_id INT IDENTITY(1,1) PRIMARY KEY,
     order_id VARCHAR(50),
@@ -187,19 +139,14 @@ CREATE TABLE order_audit (
 );
 GO
 
-
--- ============================================================
--- Exercice 9 : Création d'index non-clustered
--- ============================================================
+-- Exercice 9
 CREATE NONCLUSTERED INDEX IX_orders_status_purchasedate
 ON orders (order_status, order_purchase_timestamp);
 GO
 
-
--- ============================================================
--- Exercice 10 : Vérification du schéma
--- ============================================================
-SELECT TABLE_NAME, COLUMN_NAME, DATA_TYPE, IS_NULLABLE 
-FROM INFORMATION_SCHEMA.COLUMNS 
-WHERE TABLE_CATALOG = 'OlistCommerce' 
-ORDER BY TABLE_NAME, ORDINAL_POSITION; 
+-- Exercice 10
+SELECT TABLE_NAME, COLUMN_NAME, DATA_TYPE, IS_NULLABLE
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE TABLE_CATALOG = 'OlistCommerce'
+ORDER BY TABLE_NAME, ORDINAL_POSITION;
+GO
