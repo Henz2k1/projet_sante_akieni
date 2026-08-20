@@ -1,12 +1,16 @@
+USE LigueFootball;
+
+
+GO
 ----------------------------------------------------------
--- PARTIE A (INSERT, UPDATE, DELETE)
+-- PARTIE A : INSERT, UPDATE, DELETE
 ----------------------------------------------------------
---Exercice 1 : Insertion de 8 equipes 
+-- Exercice 1 : Insertion de 8 équipes 
 INSERT  INTO equipes (
-    nom_equipe,
-    quartier,
-    entraineur,
-    annee_creation
+       nom_equipe,
+       quartier,
+       entraineur,
+       annee_creation
 )
 VALUES              ('AS Poto-Poto', 'Poto-Poto', 'Jean Malonga', 2010),
 ('FC Bacongo', 'Bacongo', 'Pierre Nzaou', 2008),
@@ -19,11 +23,11 @@ VALUES              ('AS Poto-Poto', 'Poto-Poto', 'Jean Malonga', 2010),
 
 
 GO
---Exercice 2a : Insertion de 3 stades 
+-- Exercice 2a : Insertion de 3 stades 
 INSERT  INTO stades (
-    nom_stade,
-    quartier,
-    capacite
+       nom_stade,
+       quartier,
+       capacite
 )
 VALUES             ('Stade Alphonse Massamba-Débat', 'Bacongo', 33000),
 ('Stade de Kintélé', 'Djiri', 60000),
@@ -31,14 +35,14 @@ VALUES             ('Stade Alphonse Massamba-Débat', 'Bacongo', 33000),
 
 
 GO
---Exercice 2b : Insertion de 3 joueurs par equipe pour les 5 equipes 
+-- Exercice 2b : Insertion de joueurs par équipe
 INSERT  INTO joueurs (
-    nom,
-    prenom,
-    equipe_id,
-    poste,
-    numero_maillot,
-    date_naissance
+       nom,
+       prenom,
+       equipe_id,
+       poste,
+       numero_maillot,
+       date_naissance
 )
 VALUES              -- 1. AS Poto-Poto
 ('Mboumba', 'Patrick', (SELECT equipe_id
@@ -123,14 +127,14 @@ VALUES              -- 1. AS Poto-Poto
 
 
 GO
--- Exercice 3 — Insertion de 6 matchs de la 1ère journée
+-- Exercice 3 : Insertion de 6 matchs de la 1ère journée
 INSERT  INTO matchs (
-    equipe_domicile_id,
-    equipe_exterieur_id,
-    stade_id,
-    date_match,
-    score_domicile,
-    score_exterieur
+       equipe_domicile_id,
+       equipe_exterieur_id,
+       stade_id,
+       date_match,
+       score_domicile,
+       score_exterieur
 )
 VALUES             -- Match 1
 ((SELECT equipe_id
@@ -183,8 +187,8 @@ VALUES             -- Match 1
 
 
 GO
--- Exercice 4 — UPDATE — Enregistrer les résultats 
---Exercice 4a
+-- Exercice 4 : UPDATE — Enregistrer les résultats 
+-- Exercice 4a
 UPDATE matchs
 SET    score_domicile  = 2,
        score_exterieur = 1
@@ -217,7 +221,7 @@ WHERE  match_id = 6;
 
 
 GO
---Exercice 4b : Correction du nom du stade pour le match 1
+-- Exercice 4b : Correction du nom du stade pour le match 1
 UPDATE matchs
 SET    stade_id = (SELECT stade_id
                    FROM   stades
@@ -228,9 +232,9 @@ WHERE  match_id = 1;
 GO
 -- Exercice 5 : Enregistrement des buteurs
 INSERT  INTO buts (
-    match_id,
-    joueur_id,
-    minute
+       match_id,
+       joueur_id,
+       minute
 )
 VALUES           -- Match 1 : AS Poto-Poto (2-1) FC Bacongo
 (1, (SELECT joueur_id
@@ -245,7 +249,6 @@ VALUES           -- Match 1 : AS Poto-Poto (2-1) FC Bacongo
      FROM   joueurs
      WHERE  prenom = 'Junior'
             AND nom = 'Loussoukou'), 82),
--- Match 2 : Étoile de Moungali (0-0) Ouenzé United, ici on ne va donc pas enregistrer de buteur 
 -- Match 3 : Talangaï FC (3-2) Makélékélé Sport
 (3, (SELECT joueur_id
      FROM   joueurs
@@ -313,8 +316,8 @@ VALUES           -- Match 1 : AS Poto-Poto (2-1) FC Bacongo
 
 
 GO
--- Exercice 5 : Correction des erreurs des saisie
--- Verification de doublon avec un joueur au choix 
+-- Exercice 6 : Correction des erreurs de saisie / Doublons
+-- Vérification de doublon
 SELECT joueur_id,
        nom,
        prenom,
@@ -326,78 +329,88 @@ WHERE  nom = 'Mouyabi'
 
 
 GO
---  Insertion d'un doublon de nom pour le test
+-- Insertion d'un doublon pour le test
 INSERT  INTO joueurs (
-    nom,
-    prenom,
-    equipe_id,
-    poste,
-    numero_maillot,
-    date_naissance
+       nom,
+       prenom,
+       equipe_id,
+       poste,
+       numero_maillot,
+       date_naissance
 )
 VALUES              ('Mouyabi', 'Glodi', (SELECT equipe_id
                                           FROM   equipes
                                           WHERE  nom_equipe = 'AS Poto-Poto'), 'Attaquant', 9, '2001-11-05');
 
--- Supression du doublon 
+
+GO
+-- Suppression du doublon 
 DELETE joueurs
 WHERE  joueur_id = (SELECT MAX(joueur_id)
                     FROM   joueurs
                     WHERE  nom = 'Mouyabi'
                            AND prenom = 'Glodi');
 
+
+GO
 ----------------------------------------------------------
 -- PARTIE B : SELECT (Interrogation du championnat)
 ----------------------------------------------------------
--- Exercice 7 : Correction des erreurs des saisie
--- 7a Nombre d'equipes enregistrées
-SELECT COUNT(DISTINCT nom_equipe) AS 'Nombre Equipes Enregistrees'
+-- Exercice 7a : Nombre d'équipes enregistrées
+SELECT COUNT(DISTINCT nom_equipe) AS nombre_equipes_enregistrees
 FROM   equipes;
 
 
 GO
---7b1 : Nombre total des joueurs
-SELECT COUNT(*) AS Nombre_joueurs_inscrits
+-- Exercice 7b1 : Nombre total des joueurs
+SELECT COUNT(*) AS nombre_joueurs_inscrits
 FROM   joueurs;
 
 
 GO
---7b2 : Nombre de joueurs inscrits par equipe
+-- Exercice 7b2 : Nombre de joueurs inscrits par équipe
 SELECT   equipe_id,
-         COUNT(*) AS Nombre_joueurs
+         COUNT(*) AS nombre_joueurs
 FROM     joueurs
 GROUP BY equipe_id;
 
 
 GO
---7c : Total des buts 1ere journée 
-SELECT COUNT(*) AS Total_buts_1ere_journee
+-- Exercice 7c : Total des buts de la 1ère journée 
+SELECT COUNT(*) AS total_buts_1ere_journee
 FROM   buts;
 
--- Exercice 8 : Filtrage, tri et agrégation 
--- 8a :  Tri de joueurs par poste (nom, prénom, equipe_id)
-SELECT Nom,
-       Prenom,
-       equipe_id
-FROM   Joueurs
-WHERE  Poste = 'Attaquant';
 
--- 8b : Matchs avec plus de 3 buts (cumul exterieur + domicile)
+GO
+-- Exercice 8a : Tri des joueurs par poste (Attaquants)
+SELECT nom,
+       prenom,
+       equipe_id
+FROM   joueurs
+WHERE  poste = 'Attaquant';
+
+
+GO
+-- Exercice 8b : Matchs avec plus de 3 buts (cumul extérieur + domicile)
 SELECT *
-FROM   Matchs
+FROM   matchs
 WHERE  (score_domicile + score_exterieur) > 3;
 
--- 8c : Nombre de joueurs par equipe (tri du plus petit au lus grand)
-SELECT   equipe_id,
-         COUNT(*) AS Nombre_joueurs
-FROM     Joueurs
-GROUP BY equipe_id
-ORDER BY Nombre_joueurs DESC;
 
--- 8d : Score total de chaque match (Trie du plus spectaculaire au moins spectaculaire. )
+GO
+-- Exercice 8c : Nombre de joueurs par équipe (du plus petit au plus grand)
+SELECT   equipe_id,
+         COUNT(*) AS nombre_joueurs
+FROM     joueurs
+GROUP BY equipe_id
+ORDER BY nombre_joueurs ASC;
+
+
+GO
+-- Exercice 8d : Score total de chaque match (du plus au moins spectaculaire)
 SELECT   match_id,
          equipe_domicile_id,
          equipe_exterieur_id,
-         (score_domicile + score_exterieur) AS Total_buts
-FROM     Matchs
-ORDER BY Total_buts DESC;
+         (score_domicile + score_exterieur) AS total_buts
+FROM     matchs
+ORDER BY total_buts DESC;
